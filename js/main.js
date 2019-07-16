@@ -35,7 +35,7 @@
   };
 
   // Управляет актиностью страницы
-  var showPage = function () {
+  var managesActivityPage = function () {
     mapElement.classList.toggle('map--faded');
     adFormElement.classList.toggle('ad-form--disabled');
     mapFiltersElement.classList.toggle('ad-form--disabled');
@@ -72,7 +72,7 @@
 
   // Обработчик клика по пину
   var onClickPin = function () {
-    showPage();
+    managesActivityPage();
     setValueAdress();
   };
 
