@@ -8,7 +8,7 @@
   var typeHouseElement = document.querySelector('#type');
   var timeElement = document.querySelector('.ad-form__element--time');
   var mapPinMainElement = document.querySelector('.map__pin--main');
-
+  var adFormResetButtonElement = adFormElement.querySelector('.ad-form__reset');
 
   // Записывает значение адреса
   var setValueAdress = function () {
@@ -84,6 +84,17 @@
     };
   };
 
+  // Обработчик сбраса формы
+  var onResetForm = function () {
+    managesActivityPage();
+    setValueAdress();
+    resetPins();
+
+    mapPinMainElement.style.left = '570px';
+    mapPinMainElement.style.top = '375px';
+    adFormResetButtonElement.removeEventListener('click', onResetForm);
+  };
+
   // Обработчик нажатия на пин
   var onMouseDownPin = function (evt) {
     var pinCoords = getCoords(mapPinMainElement);
@@ -125,10 +136,12 @@
 
       if (pinsElements.length === 1) {
         onMouseUpPin();
+        adFormResetButtonElement.addEventListener('click', onResetForm);
       } else {
         setValueAdress();
         return;
       }
+
     };
 
     document.addEventListener('mousemove', onMouseMove);
