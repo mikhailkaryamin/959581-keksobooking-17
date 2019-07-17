@@ -38,7 +38,6 @@
   var managesActivityPage = function () {
     mapElement.classList.toggle('map--faded');
     adFormElement.classList.toggle('ad-form--disabled');
-    mapFiltersElement.classList.toggle('ad-form--disabled');
 
     if (mapElement.classList.contains('map--faded')) {
       window.filters.setStatusFieldset('disable');
@@ -71,49 +70,52 @@
   };
 
   // Обработчик клика по пину
-  var onClickPin = function () {
+  var onMouseUpPin = function () {
     managesActivityPage();
     setValueAdress();
   };
 
+  // Получаем координаты
+  var getCoords = function (el) {
+    var box = el.getBoundingClientRect();
+
+    return {
+      top: box.top + pageYOffset,
+      left: box.left + pageXOffset
+    };
+  };
+
   // Обработчик нажатия на пин
   var onMouseDownPin = function (evt) {
-    var mapWidthElem = mapElement.offsetWidth;
+    var pinCoords = getCoords(mapPinMainElement);
+    var shiftX = evt.pageX - pinCoords.left;
+    var shiftY = evt.pageY - pinCoords.top;
 
-    var Coordinate = function (x, y) {
-      this.x = x;
-      this.y = y;
-    };
-
-    Coordinate.prototype.setX = function (x) {
-      this.x = x;
-    };
-
-    Coordinate.prototype.setY = function (y) {
-      this.y = y;
-    };
-
-    var startCoords = new Coordinate(evt.clientX, evt.clientY);
-
-    var dragged = false;
+    var mapCoords = getCoords(mapElement);
 
     var onMouseMove = function (moveEvt) {
-      dragged = true;
+      var newLeft = moveEvt.pageX - shiftX - mapCoords.left;
+      var newTop = moveEvt.pageY - shiftY - mapCoords.top;
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
-
-      startCoords.setX(moveEvt.clientX);
-      startCoords.setY(moveEvt.clientY);
-
-      if (moveEvt.clientX < mapWidthElem && moveEvt.clientX > 0) {
-        mapPinMainElement.style.left = (mapPinMainElement.offsetLeft - shift.x) + 'px';
+      if (newLeft < 0) {
+        newLeft = 0;
       }
-      if (moveEvt.clientY > 130 && moveEvt.clientY < 630) {
-        mapPinMainElement.style.top = (mapPinMainElement.offsetTop - shift.y) + 'px';
+
+      var rightEdge = mapElement.offsetWidth - mapPinMainElement.offsetWidth;
+
+      if (newLeft > rightEdge) {
+        newLeft = rightEdge;
       }
+
+      if (newTop < 130) {
+        newTop = 130;
+      }
+      if (newTop > 630) {
+        newTop = 630;
+      }
+
+      mapPinMainElement.style.left = newLeft + 'px';
+      mapPinMainElement.style.top = newTop + 'px';
     };
 
     var onMouseUp = function () {
@@ -122,15 +124,11 @@
 
       var pinsElements = mapPinsElement.querySelectorAll('.map__pin');
 
-      if (dragged && pinsElements.length === 1) {
-        onClickPin();
-        mapPinMainElement.removeEventListener('click', onClickPin);
-      } else if (dragged && pinsElements.length > 1) {
-        setValueAdress();
-        mapPinMainElement.removeEventListener('click', onClickPin);
+      if (pinsElements.length === 1) {
+        onMouseUpPin();
       } else {
-        mapPinMainElement.addEventListener('click', onClickPin);
-        mapPinMainElement.style = 'left: 570px; top: 375px;';
+        setValueAdress();
+        return;
       }
     };
 

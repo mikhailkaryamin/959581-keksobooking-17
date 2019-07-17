@@ -4,7 +4,7 @@
   var adFormElement = document.querySelector('.ad-form');
   var mapFiltersElement = document.querySelector('.map__filters');
   var fieldsetAdFormElements = adFormElement.querySelectorAll('fieldset');
-  var fieldsetmapFiltersElements = mapFiltersElement.querySelectorAll('fieldset');
+  var fieldsetMapFiltersElements = mapFiltersElement.querySelectorAll('select');
 
   // Изменяет тип жилья
   var changePricePerNight = function (typeOfHousing) {
@@ -57,7 +57,7 @@
 
     fieldsetAdFormElements.forEach(keyStatus);
 
-    fieldsetmapFiltersElements.forEach(keyStatus);
+    fieldsetMapFiltersElements.forEach(keyStatus);
   };
 
   window.filters = {
