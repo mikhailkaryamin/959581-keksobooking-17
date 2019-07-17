@@ -5,7 +5,6 @@
   var mapPinsElement = document.querySelector('.map__pins');
   var mapElement = document.querySelector('.map');
   var adFormElement = document.querySelector('.ad-form');
-  var mapFiltersElement = document.querySelector('.map__filters');
   var typeHouseElement = document.querySelector('#type');
   var timeElement = document.querySelector('.ad-form__element--time');
   var mapPinMainElement = document.querySelector('.map__pin--main');
