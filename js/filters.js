@@ -45,7 +45,7 @@
 
   // Устанавливает состояние фильтров
   var setDisable = function (el) {
-    el.setAttribute('disabled', 'disabled')
+    el.setAttribute('disabled', 'disabled');
   };
 
   var setActive = function (el) {
