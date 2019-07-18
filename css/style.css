@@ -382,6 +382,29 @@ fieldset {
           box-shadow: 0 0 2px 2px #ff6547;
 }
 
+.map__no-offers {
+  display: block;
+  position: absolute;
+
+  width: 300px;
+  height: 100px;
+
+  background-color: #ff5635;
+
+  top: 130px;
+  right: 0;
+  left: 0;
+
+  margin: 0 auto;
+  padding-top: 43px;
+  color: #ffffff;
+
+  text-align: center;
+
+  border-radius: 20px;
+  opacity: 0.7;
+}
+
 .map__feature {
   display: inline-block;
   overflow: hidden;

@@ -49,7 +49,7 @@
   };
 
   var setActive = function (el) {
-    el.removeAttribute('disabled', 'disabled');
+    el.removeAttribute('disabled');
   };
 
   var setStatusFieldset = function (status) {
@@ -60,7 +60,7 @@
     fieldsetMapFiltersElements.forEach(keyStatus);
   };
 
-  window.filters = {
+  window.form = {
     changePricePerNight: changePricePerNight,
     changeTime: changeTime,
     setStatusFieldset: setStatusFieldset
