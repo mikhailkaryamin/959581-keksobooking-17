@@ -103,12 +103,12 @@
     var data = new FormData(adFormElement);
 
     var onUploadSuccess = function () {
-      window.map.onResetForm();
+      window.main.onResetForm();
       showUploadSuccessWindow();
     };
 
     var onUploadError = function () {
-      window.map.onResetForm();
+      window.main.onResetForm();
       showUploadErrorWindow();
     };
 
