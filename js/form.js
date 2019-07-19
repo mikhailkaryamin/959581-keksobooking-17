@@ -5,6 +5,8 @@
   var mapFiltersElement = document.querySelector('.map__filters');
   var fieldsetAdFormElements = adFormElement.querySelectorAll('fieldset');
   var fieldsetMapFiltersElements = mapFiltersElement.querySelectorAll('select');
+  var selectCapacityElement = document.querySelector('#capacity');
+  var selectNumberRoomsElement = document.querySelector('#room_number');
 
   // Изменяет тип жилья
   var changePricePerNight = function (typeOfHousing) {
@@ -59,6 +61,19 @@
 
     fieldsetMapFiltersElements.forEach(keyStatus);
   };
+
+  // Обработчик выбора количества мест
+  var onCapacity = function (evt) {
+    window.validator.checkValidity(evt.target);
+  };
+
+  // Обработчик выбора комнат
+  var onChangeNumberRoom = function () {
+    window.validator.checkValidity(selectCapacityElement);
+  };
+
+  selectCapacityElement.addEventListener('change', onCapacity);
+  selectNumberRoomsElement.addEventListener('change', onChangeNumberRoom);
 
   window.form = {
     changePricePerNight: changePricePerNight,

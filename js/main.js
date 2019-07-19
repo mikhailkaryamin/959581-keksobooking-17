@@ -1,86 +1,15 @@
 'use strict';
 
 (function () {
-  var pinsDescription = []; // сохраняем метки
   var mapPinsElement = document.querySelector('.map__pins');
   var mapElement = document.querySelector('.map');
   var adFormElement = document.querySelector('.ad-form');
-  var typeHouseElement = document.querySelector('#type');
-  var timeElement = document.querySelector('.ad-form__element--time');
   var mapPinMainElement = document.querySelector('.map__pin--main');
   var adFormResetButtonElement = adFormElement.querySelector('.ad-form__reset');
   var mapFiltersElement = mapElement.querySelector('.map__filters');
   var typeHousingElement = document.querySelector('#housing-type');
   var noOffers = false;
-
-  // Записывает значение адреса
-  var setValueAdress = function () {
-    var adressElement = document.querySelector('#address');
-    var numberX = parseInt(mapPinMainElement.style.left, 10);
-    var numberY = parseInt(mapPinMainElement.style.top, 10);
-    var mapPinHeight = parseInt(getComputedStyle(mapPinMainElement).getPropertyValue('height'), 10);
-    var mapPinwidth = parseInt(getComputedStyle(mapPinMainElement).getPropertyValue('width'), 10);
-
-    var stringAdress = Math.round(numberX + 0.5 * mapPinHeight) + ', ' + (numberY + mapPinwidth);
-    adressElement.value = stringAdress;
-  };
-
-  // Очищает пины
-  var resetPins = function () {
-    var pinsElements = mapPinsElement.querySelectorAll('.map__pin');
-
-    for (var i = 1; i < pinsElements.length; i++) {
-      pinsElements[i].remove();
-    }
-  };
-
-  // Управляет актиностью страницы
-  var managesActivityPage = function () {
-    mapElement.classList.toggle('map--faded');
-    adFormElement.classList.toggle('ad-form--disabled');
-
-    if (mapElement.classList.contains('map--faded')) {
-      window.form.setStatusFieldset('disable');
-      resetPins();
-    } else {
-      var mapPins = pinsDescription;
-
-      // Если больше 5 то обрезаем
-      if (pinsDescription.length > 5) {
-        mapPins = window.filterPins.filterMaxNumberPins(pinsDescription);
-      }
-
-      window.form.setStatusFieldset('active');
-      resetPins();
-      window.renderPin.addPinList(mapPins);
-    }
-  };
-
-  // Успешная загрузка
-  var onLoadSuccess = function (data) {
-    pinsDescription = data;
-    window.form.setStatusFieldset('disable');
-    setValueAdress();
-
-    timeElement.addEventListener('change', onChangeTime);
-    typeHouseElement.addEventListener('change', onChangeTypeHouse);
-  };
-
-  // Обработчик цены на жилье
-  var onChangeTypeHouse = function (evt) {
-    window.form.changePricePerNight(evt.target.value);
-  };
-
-  // Обработчик времени заезда и выезда
-  var onChangeTime = function (evt) {
-    window.form.changeTime(evt.target.value);
-  };
-
-  // Обработчик клика по пину
-  var onMouseUpPin = function () {
-    managesActivityPage();
-    setValueAdress();
-  };
+  var selectCapacityElement = document.querySelector('#capacity');
 
   // Получаем координаты
   var getCoords = function (el) {
@@ -115,30 +44,31 @@
     mapFiltersElement.reset();
     adFormElement.reset();
 
-    managesActivityPage();
-    setValueAdress();
-    resetPins();
+    window.managesPage.switchActivityPage();
+    window.housingAddress.setValueAddress();
+    window.managesPage.resetPins();
     removeNoOffersWindow();
 
     mapPinMainElement.style.left = '570px';
     mapPinMainElement.style.top = '375px';
+
+    mapPinMainElement.addEventListener('click', onClick);
     adFormResetButtonElement.removeEventListener('click', onResetForm);
   };
 
   // Обработчик смены типа жилья
   var onChangeTypeHousing = function (evt) {
     var typeHousing = evt.target.value;
-
-    var typePins = window.filterPins.filterHousingType(pinsDescription, typeHousing);
+    var typePins = window.filterPins.filterHousingType(window.pinsDescription, typeHousing);
 
     removeNoOffersWindow();
 
     if (typePins.length > 1) {
-      resetPins();
+      window.managesPage.resetPins();
       window.renderPin.addPinList(typePins);
       noOffers = false;
     } else {
-      resetPins();
+      window.managesPage.resetPins();
       renderNoOffersWindow();
       noOffers = true;
     }
@@ -180,16 +110,9 @@
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
 
-      var pinsElements = mapPinsElement.querySelectorAll('.map__pin');
+      window.housingAddress.setValueAddress();
 
-      if (pinsElements.length === 1 && !noOffers) {
-        onMouseUpPin();
-        adFormResetButtonElement.addEventListener('click', onResetForm);
-      } else {
-        setValueAdress();
-        return;
-      }
-
+      adFormElement.addEventListener('submit', onUploadForm);
       mapPinsElement.addEventListener('click', onCardAdClick);
     };
 
@@ -197,13 +120,21 @@
     document.addEventListener('mouseup', onMouseUp);
   };
 
+  // Обработчик открытия
+  var onClick = function () {
+    window.managesPage.switchActivityPage();
+    window.housingAddress.setValueAddress();
+    adFormResetButtonElement.addEventListener('click', onResetForm);
+    mapPinMainElement.removeEventListener('click', onClick);
+  };
+
   // Получаем нужное обьявление
   var getCardAdData = function (altImg) {
-    var mapPinIndex = pinsDescription.map(function (e) {
+    var mapPinIndex = window.pinsDescription.map(function (e) {
       return e.offer.title;
     }).indexOf(altImg);
 
-    return pinsDescription[mapPinIndex];
+    return window.pinsDescription[mapPinIndex];
   };
 
   // Удаляет карточку объявления
@@ -236,10 +167,22 @@
     popupClose.addEventListener('click', removeCardAd);
   };
 
+  // Обработчик отправки формы
+  var onUploadForm = function (evt) {
+    evt.preventDefault();
+    if (!window.validator.checkValidity(selectCapacityElement)) {
+      return;
+    }
+    window.upload.uploadFormAd(evt);
+    adFormElement.removeEventListener('submit', onUploadForm);
+  };
+
   mapPinMainElement.addEventListener('mousedown', onMouseDownPin);
-
-  window.backend.load(onLoadSuccess);
-
+  mapPinMainElement.addEventListener('click', onClick);
   typeHousingElement.addEventListener('change', onChangeTypeHousing);
+
+  window.main = {
+    onResetForm: onResetForm
+  };
 
 })();
