@@ -62,18 +62,13 @@
     fieldsetMapFiltersElements.forEach(keyStatus);
   };
 
-  // Обработчик выбора количества мест
-  var onCapacity = function (evt) {
-    window.validator.checkValidity(evt.target);
-  };
-
-  // Обработчик выбора комнат
-  var onChangeNumberRoom = function () {
+  // Обработчик количества мест
+  var onChangeCapacity = function () {
     window.validator.checkValidity(selectCapacityElement);
   };
 
-  selectCapacityElement.addEventListener('change', onCapacity);
-  selectNumberRoomsElement.addEventListener('change', onChangeNumberRoom);
+  selectCapacityElement.addEventListener('change', onChangeCapacity);
+  selectNumberRoomsElement.addEventListener('change', onChangeCapacity);
 
   window.form = {
     changePricePerNight: changePricePerNight,

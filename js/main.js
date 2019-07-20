@@ -21,24 +21,6 @@
     };
   };
 
-  // Показывает окно "Нет кексов"
-  var renderNoOffersWindow = function () {
-    var noOffersElement = document.createElement('div');
-    noOffersElement.classList.add('map__no-offers');
-    noOffersElement.textContent = 'Извините, таких кексов - нет';
-    mapElement.insertAdjacentElement('afterbegin', noOffersElement);
-  };
-
-  // Удаляет окно "Нет кексов"
-  var removeNoOffersWindow = function () {
-    var noOffersElement = mapElement.querySelector('.map__no-offers');
-
-    if (noOffers) {
-      noOffers = false;
-      noOffersElement.remove();
-    }
-  };
-
   // Обработчик сброса формы
   var onResetForm = function () {
     mapFiltersElement.reset();
@@ -47,12 +29,12 @@
     window.managesPage.switchActivityPage();
     window.housingAddress.setValueAddress();
     window.managesPage.resetPins();
-    removeNoOffersWindow();
+    window.noOffersWindow.removeNoOffersWindow(noOffers);
 
     mapPinMainElement.style.left = '570px';
     mapPinMainElement.style.top = '375px';
 
-    mapPinMainElement.addEventListener('click', onClick);
+    mapPinMainElement.addEventListener('click', onClickMainPin);
     adFormResetButtonElement.removeEventListener('click', onResetForm);
   };
 
@@ -61,7 +43,7 @@
     var typeHousing = evt.target.value;
     var typePins = window.filterPins.filterHousingType(window.pinsDescription, typeHousing);
 
-    removeNoOffersWindow();
+    window.noOffersWindow.removeNoOffersWindow(noOffers);
 
     if (typePins.length > 1) {
       window.managesPage.resetPins();
@@ -69,7 +51,7 @@
       noOffers = false;
     } else {
       window.managesPage.resetPins();
-      renderNoOffersWindow();
+      window.noOffersWindow.renderNoOffersWindow();
       noOffers = true;
     }
   };
@@ -112,6 +94,7 @@
 
       window.housingAddress.setValueAddress();
 
+      typeHousingElement.addEventListener('change', onChangeTypeHousing);
       adFormElement.addEventListener('submit', onUploadForm);
       mapPinsElement.addEventListener('click', onCardAdClick);
     };
@@ -121,50 +104,32 @@
   };
 
   // Обработчик открытия
-  var onClick = function () {
+  var onClickMainPin = function () {
     window.managesPage.switchActivityPage();
     window.housingAddress.setValueAddress();
     adFormResetButtonElement.addEventListener('click', onResetForm);
-    mapPinMainElement.removeEventListener('click', onClick);
-  };
-
-  // Получаем нужное обьявление
-  var getCardAdData = function (altImg) {
-    var mapPinIndex = window.pinsDescription.map(function (e) {
-      return e.offer.title;
-    }).indexOf(altImg);
-
-    return window.pinsDescription[mapPinIndex];
-  };
-
-  // Удаляет карточку объявления
-  var removeCardAd = function () {
-    var cardAdElement = mapElement.querySelector('.map__card');
-
-    if (cardAdElement) {
-      cardAdElement.remove();
-    }
+    mapPinMainElement.removeEventListener('click', onClickMainPin);
   };
 
   // Обработчик открытия карточки объявления
   var onCardAdClick = function (evt) {
     var target = evt.target;
-    var cardAdElement = target.closest('.map__pin');
+    var mapPinElement = target.closest('.map__pin');
 
-    if (!cardAdElement || cardAdElement.matches('.map__pin--main')) {
+    if (!mapPinElement || mapPinElement.matches('.map__pin--main')) {
       return;
     }
 
-    var imageElement = cardAdElement.querySelector('img');
+    var imageElement = mapPinElement.querySelector('img');
     var imageAlt = imageElement.getAttribute('alt');
-    var cardAdData = getCardAdData(imageAlt);
+    var cardAdData = window.cardAd.getCardAdData(imageAlt);
 
-    removeCardAd();
-    window.pinDescription.addCardAd(cardAdData);
+    window.cardAd.removeCardAd();
+    window.cardAd.addCardAd(cardAdData);
 
     var popupClose = document.querySelector('.popup__close');
 
-    popupClose.addEventListener('click', removeCardAd);
+    popupClose.addEventListener('click', window.cardAd.removeCardAd);
   };
 
   // Обработчик отправки формы
@@ -178,8 +143,7 @@
   };
 
   mapPinMainElement.addEventListener('mousedown', onMouseDownPin);
-  mapPinMainElement.addEventListener('click', onClick);
-  typeHousingElement.addEventListener('change', onChangeTypeHousing);
+  mapPinMainElement.addEventListener('click', onClickMainPin);
 
   window.main = {
     onResetForm: onResetForm
