@@ -2,6 +2,7 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
   var imageChooserAdImgElement = document.querySelector('.ad-form__input');
   var uploadPreviewAdImgElement = document.querySelector('.ad-form__photo');
   var imageChooserAvatarElement = document.querySelector('.ad-form-header__input');

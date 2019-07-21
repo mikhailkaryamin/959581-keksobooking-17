@@ -3,6 +3,24 @@
 (function () {
   var mapElement = document.querySelector('.map');
 
+  // Словарь типа жилья на русский язык
+  var houseType = {
+    'bungalo': 'Бунгало',
+    'flat': 'Квартира',
+    'house': 'Дом',
+    'palace': 'Дворец'
+  };
+
+  // Словарь класс удобстава
+  var classFeature = {
+    'wifi': '.popup__feature--wifi',
+    'dishwasher': '.popup__feature--dishwasher',
+    'parking': '.popup__feature--parking',
+    'washer': '.popup__feature--washer',
+    'elevator': '.popup__feature--elevator',
+    'conditioner': '.popup__feature--conditioner'
+  };
+
   // Создаем карточку объявления
   var createCardAd = function (dataAd) {
     var cardElement = document.querySelector('#card')
@@ -35,14 +53,6 @@
     return cardAdElement;
   };
 
-  // Словарь типа жилья на русский язык
-  var houseType = {
-    'bungalo': 'Бунгало',
-    'flat': 'Квартира',
-    'house': 'Дом',
-    'palace': 'Дворец'
-  };
-
   // Фото карточки
   var renderPhotosCardElement = function (photoSrc) {
     var popupPhotosElement = document.querySelector('#card')
@@ -63,16 +73,6 @@
     });
 
     return fragment;
-  };
-
-  // Словарь класс удобстава
-  var classFeature = {
-    'wifi': '.popup__feature--wifi',
-    'dishwasher': '.popup__feature--dishwasher',
-    'parking': '.popup__feature--parking',
-    'washer': '.popup__feature--washer',
-    'elevator': '.popup__feature--elevator',
-    'conditioner': '.popup__feature--conditioner'
   };
 
   // Получаем список удобств
