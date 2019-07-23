@@ -14,24 +14,24 @@
 
     switch (typeOfHousing) {
       case 'bungalo':
-        priceElement.placeholder = 0;
-        priceElement.min = 0;
+        priceElement.placeholder = window.constatns.PricePerNight.ZERO;
+        priceElement.min = window.constatns.PricePerNight.ZERO;
         break;
       case 'flat':
-        priceElement.placeholder = 1000;
-        priceElement.min = 1000;
+        priceElement.placeholder = window.constatns.PricePerNight.ONE_THOUSAND;
+        priceElement.min = window.constatns.PricePerNight.ONE_THOUSAND;
         break;
       case 'house':
-        priceElement.placeholder = 5000;
-        priceElement.min = 5000;
+        priceElement.placeholder = window.constatns.PricePerNight.FIVE_THOUSAND;
+        priceElement.min = window.constatns.PricePerNight.FIVE_THOUSAND;
         break;
       case 'palace':
-        priceElement.placeholder = 10000;
-        priceElement.min = 10000;
+        priceElement.placeholder = window.constatns.PricePerNight.TEN_THOUSAND;
+        priceElement.min = window.constatns.PricePerNight.TEN_THOUSAND;
         break;
       default:
-        priceElement.placeholder = 5000;
-        priceElement.min = 0;
+        priceElement.placeholder = window.constatns.PricePerNight.FIVE_THOUSAND;
+        priceElement.min = window.constatns.PricePerNight.ZERO;
         break;
     }
   };
@@ -43,6 +43,19 @@
 
     timeInElement.value = time;
     timeOutElement.value = time;
+  };
+
+  // Очищает загруженные картинки
+  var resetImgForm = function () {
+    var avatarFormElement = document.querySelector('.ad-form-header__preview');
+    var imgAvatarElement = avatarFormElement.querySelector('img');
+    var photosHousingElement = document.querySelector('.ad-form__photo');
+    var imgPhotosHousingElement = photosHousingElement.querySelectorAll('img');
+    imgAvatarElement.src = 'img/muffin-grey.svg';
+
+    imgPhotosHousingElement.forEach(function (el) {
+      el.remove();
+    });
   };
 
   // Устанавливает состояние фильтров
@@ -73,6 +86,7 @@
   window.form = {
     changePricePerNight: changePricePerNight,
     changeTime: changeTime,
-    setStatusFieldset: setStatusFieldset
+    setStatusFieldset: setStatusFieldset,
+    resetImgForm: resetImgForm
   };
 })();

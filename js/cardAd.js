@@ -33,7 +33,7 @@
     cardAdElement.querySelector('.popup__text--address').textContent = dataAd.offer.address;
     cardAdElement.querySelector('.popup__text--price').textContent = dataAd.offer.price + '₽/ночь';
     cardAdElement.querySelector('.popup__type').textContent = houseType[dataAd.offer.type];
-    cardAdElement.querySelector('.popup__text--capacity').textContent = dataAd.offer.rooms + ' комнаты для ' + dataAd.offer.guests;
+    cardAdElement.querySelector('.popup__text--capacity').textContent = dataAd.offer.rooms + ' комнаты для ' + dataAd.offer.guests + ' гостей';
     cardAdElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + dataAd.offer.checkin + ', выезд до ' + dataAd.offer.checkout;
     cardAdElement.querySelector('.popup__description').textContent = dataAd.offer.description;
 

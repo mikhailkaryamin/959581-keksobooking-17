@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-
   var imageChooserAdImgElement = document.querySelector('.ad-form__input');
   var uploadPreviewAdImgElement = document.querySelector('.ad-form__photo');
   var imageChooserAvatarElement = document.querySelector('.ad-form-header__input');
@@ -12,11 +10,9 @@
   var checkValidityTypeImg = function (file) {
     var fileName = file.name.toLowerCase();
 
-    var matches = FILE_TYPES.some(function (it) {
+    return window.constatns.FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
     });
-
-    return matches;
   };
 
   imageChooserAdImgElement.addEventListener('change', function () {

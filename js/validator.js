@@ -13,32 +13,32 @@
 
     switch (numberRooms) {
       case '1':
-        maxNumberGuest = 1;
+        maxNumberGuest = window.constatns.MaxNumberGuest.ONE;
         stringError = 'Только для 1 гостя';
         break;
       case '2':
-        maxNumberGuest = 2;
+        maxNumberGuest = window.constatns.MaxNumberGuest.TWO;
         stringError = 'Только для 1 или 2 гостей';
         break;
       case '3':
-        maxNumberGuest = 3;
+        maxNumberGuest = window.constatns.MaxNumberGuest.THREE;
         stringError = 'Только для 1, 2 или 3 гостей';
         break;
       case '100':
-        maxNumberGuest = 101;
+        maxNumberGuest = window.constatns.MaxNumberGuest.ONE_HUNDRED;
         stringError = 'Не для гостей';
         break;
       default:
         break;
     }
 
-    if (!(maxNumberGuest === 101)) {
+    if (!(maxNumberGuest === window.constatns.MaxNumberGuest.ONE_HUNDRED)) {
       if (selectValueNumber > maxNumberGuest || !selectValueNumber) {
         errors.push(stringError);
       }
     }
 
-    if (maxNumberGuest === 101) {
+    if (maxNumberGuest === window.constatns.MaxNumberGuest.ONE_HUNDRED) {
       if (selectValueNumber) {
         errors.push(stringError);
       }
@@ -53,7 +53,7 @@
 
     select.setCustomValidity(errors.join('. '));
 
-    return errors.length ? false : true;
+    return !errors.length;
   };
 
   window.validator = {

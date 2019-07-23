@@ -7,7 +7,6 @@
   var mapPinMainElement = document.querySelector('.map__pin--main');
   var adFormResetButtonElement = adFormElement.querySelector('.ad-form__reset');
   var mapFiltersElement = mapElement.querySelector('.map__filters');
-  var typeHousingElement = document.querySelector('#housing-type');
   var noOffers = false;
   var selectCapacityElement = document.querySelector('#capacity');
 
@@ -30,24 +29,33 @@
     window.housingAddress.setValueAddress();
     window.managesPage.resetPins();
     window.noOffersWindow.removeNoOffersWindow(noOffers);
+    window.cardAd.removeCardAd();
+    window.form.resetImgForm();
 
-    mapPinMainElement.style.left = '570px';
-    mapPinMainElement.style.top = '375px';
+    mapPinMainElement.style.left = window.constatns.STARTING_COORD_HORIZONTALY;
+    mapPinMainElement.style.top = window.constatns.STARTING_COORD_VERTICAL;
 
     mapPinMainElement.addEventListener('click', onClickMainPin);
     adFormResetButtonElement.removeEventListener('click', onResetForm);
   };
 
-  // Обработчик смены типа жилья
-  var onChangeTypeHousing = function (evt) {
-    var typeHousing = evt.target.value;
-    var typePins = window.filterPins.filterHousingType(window.pinsDescription, typeHousing);
+  // Обработчик фильтра карты
+  var onChangeFilterMapPins = function (evt) {
+    var filterValue = evt.target.value;
+    var filterName = evt.target.name;
 
+    var filteredPins = window.filterPins.getFilteredList(filterValue, filterName);
+
+    renderFilterPins(filteredPins);
+  };
+
+  // Рендер пинов
+  var renderFilterPins = function (pins) {
     window.noOffersWindow.removeNoOffersWindow(noOffers);
 
-    if (typePins.length > 1) {
+    if (pins.length >= 1) {
       window.managesPage.resetPins();
-      window.renderPin.addPinList(typePins);
+      window.renderPin.addPinList(pins);
       noOffers = false;
     } else {
       window.managesPage.resetPins();
@@ -93,8 +101,7 @@
       document.removeEventListener('mouseup', onMouseUp);
 
       window.housingAddress.setValueAddress();
-
-      typeHousingElement.addEventListener('change', onChangeTypeHousing);
+      mapFiltersElement.addEventListener('change', onChangeFilterMapPins);
       adFormElement.addEventListener('submit', onUploadForm);
       mapPinsElement.addEventListener('click', onCardAdClick);
     };

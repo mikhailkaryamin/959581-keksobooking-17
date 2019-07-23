@@ -8,7 +8,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === window.constatns.SERVER_CODE_OK) {
         onLoad(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -23,7 +23,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = window.constatns.SERVER_TIMEOUT;
 
     xhr.open('GET', URL);
     xhr.send();
@@ -36,7 +36,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === window.constatns.SERVER_CODE_OK) {
         onUploadSuccess(xhr.response);
       } else {
         onUploadError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -51,7 +51,7 @@
       onUploadError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000; // 10s
+    xhr.timeout = window.constatns.SERVER_TIMEOUT; // 10s
 
     xhr.open('POST', URL);
     xhr.send(data);
