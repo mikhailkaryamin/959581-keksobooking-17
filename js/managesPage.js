@@ -28,10 +28,9 @@
       var mapPins = window.pinsDescription;
 
       // Если больше 5 то обрезаем
-      if (window.pinsDescription.length > 5) {
+      if (window.pinsDescription.length > window.constatns.MAX_NUMBER_PINS) {
         mapPins = window.filterPins.filterMaxNumberPins(window.pinsDescription);
       }
-
       window.form.setStatusFieldset('active');
       resetPins();
       window.renderPin.addPinList(mapPins);
